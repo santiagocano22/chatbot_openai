@@ -1,9 +1,10 @@
+import markdown2
 from openai import OpenAI, AssistantEventHandler
 from typing_extensions import override
 import os
 
 # Inicializa el cliente OpenAI con tu clave API
-client = OpenAI(api_key="api_key")
+client = OpenAI(api_key="sk-proj-o0y3CEc5YqhhfZmrvnjUT3BlbkFJoXpQXelSb5rsETFxxjw8")
 
 # Crea el asistente de viajes
 def create_assistant():
@@ -42,11 +43,11 @@ class CapturingEventHandler(AssistantEventHandler):
     
     @override
     def on_text_created(self, text) -> None:
-        self.response_text += str(text)
+        self.response_text += text.value  # Extraer solo el valor del texto
   
     @override
     def on_text_delta(self, delta, snapshot):
-        self.response_text += str(delta.value)
+        self.response_text += delta.value  # Extraer solo el valor del texto
   
     def on_tool_call_created(self, tool_call):
         pass
@@ -65,4 +66,6 @@ def run_thread(thread_id, assistant_id):
     ) as stream:
         stream.until_done()
     
-    return event_handler.response_text
+    # Convertir Markdown a HTML
+    html_response = markdown2.markdown(event_handler.response_text)
+    return html_response

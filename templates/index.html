@@ -9,29 +9,42 @@
 <body>
     <div class="chat-container">
         <div id="chat-box"></div>
-        <input type="text" id="user-input" placeholder="Escribe tu mensaje aquí...">
+        <textarea id="user-input" placeholder="Escribe tu mensaje aquí..." rows="1"></textarea>
         <button onclick="sendMessage()">Enviar</button>
     </div>
     <script>
         function sendMessage() {
-            const userInput = document.getElementById('user-input').value;
+            const userInput = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
 
-            chatBox.innerHTML += `<div class="user-message">${userInput}</div>`;
-            document.getElementById('user-input').value = '';
-
+            chatBox.innerHTML += `<div class="user-message">${userInput.value}</div>`;
             fetch('/send_message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `message=${userInput}`
+                body: `message=${encodeURIComponent(userInput.value)}`
             })
             .then(response => response.json())
             .then(data => {
                 chatBox.innerHTML += `<div class="assistant-message">${data.response}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
             });
+
+            userInput.value = '';
+            userInput.rows = 1; // Reset the textarea rows
         }
+
+        document.getElementById('user-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.getElementById('user-input').addEventListener('input', function () {
+            this.rows = Math.min(5, (this.value.split('\n').length || 1)); // Allow up to 5 rows
+        });
     </script>
 </body>
 </html>
