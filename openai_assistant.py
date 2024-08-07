@@ -3,8 +3,12 @@ from openai import OpenAI, AssistantEventHandler
 from typing_extensions import override
 import os
 
-# Inicializa el cliente OpenAI con tu clave API
-client = OpenAI(api_key="sk-proj-o0y3CEc5YqhhfZmrvnjUT3BlbkFJoXpQXelSb5rsETFxxjw8")
+# Inicializa el cliente OpenAI con tu clave API desde las variables de entorno
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    raise ValueError("No API key found. Please set the OPENAI_API_KEY environment variable.")
+
+client = OpenAI(api_key=api_key)
 
 # Crea el asistente de viajes
 def create_assistant():
