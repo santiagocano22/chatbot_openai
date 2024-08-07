@@ -4,7 +4,7 @@ from typing_extensions import override
 import os
 
 # Inicializa el cliente OpenAI con tu clave API
-client = OpenAI(api_key="sk-proj-o0y3CEc5YqhhfZmrvnjUT3BlbkFJoXpQXelSb5rsETFxxjw8")
+client = OpenAI(api_key="")
 
 # Crea el asistente de viajes
 def create_assistant():
