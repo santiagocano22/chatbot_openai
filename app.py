@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from openai_assistant import create_assistant, create_thread, add_message, run_thread
+import os
 
 app = Flask(__name__)
 
@@ -18,4 +19,5 @@ def send_message():
     return jsonify({'response': response})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
