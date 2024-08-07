@@ -2,3 +2,4 @@ flask
 openai
 typing-extensions
 markdown2
+gunicorn
